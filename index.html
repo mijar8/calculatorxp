@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rechner — Windows XP Edition</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Windows XP Window Container -->
+  <div class="xp-window">
+    
+    <!-- Windows XP Titlebar (Luna Blue) -->
+    <div class="xp-titlebar">
+      <div class="xp-title">
+        <span class="xp-icon">🧮</span>
+        <span>Rechner</span>
+      </div>
+      <div class="xp-controls">
+        <button class="xp-btn-ctrl min" title="Minimieren">_</button>
+        <button class="xp-btn-ctrl max" title="Maximieren">□</button>
+        <button id="btn-close-window" class="xp-btn-ctrl close" title="Schließen">✕</button>
+      </div>
+    </div>
+
+    <!-- Windows XP Menu Bar -->
+    <div class="xp-menubar">
+      <span class="menu-item" id="menu-help">Hilfe</span>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="xp-body">
+      
+      <!-- Left Side: Calculator Core -->
+      <div class="xp-main">
+        
+        <!-- Tab Bar -->
+        <div class="xp-tabs">
+          <button id="tab-calc" class="xp-tab active">🧮 Rechner</button>
+          <button id="tab-tip" class="xp-tab">🍕 Trinkgeld & Split</button>
+        </div>
+
+        <!-- Mode 1: Standard Rechner -->
+        <div id="calc-mode" class="mode-view">
+          <div class="xp-display-box">
+            <div id="expr" class="xp-expr"></div>
+            <div id="result" class="xp-result">0</div>
+          </div>
+
+          <div class="xp-keys">
+            <button data-action="clear" class="xp-key fn">AC</button>
+            <button data-action="backspace" class="xp-key fn" title="Rücktaste">⌫</button>
+            <button data-action="toggle" class="xp-key fn">±</button>
+            <button data-action="percent" class="xp-key fn">%</button>
+
+            <button data-action="num" data-value="7" class="xp-key num">7</button>
+            <button data-action="num" data-value="8" class="xp-key num">8</button>
+            <button data-action="num" data-value="9" class="xp-key num">9</button>
+            <button data-action="op" data-value="/" class="xp-key op">÷</button>
+
+            <button data-action="num" data-value="4" class="xp-key num">4</button>
+            <button data-action="num" data-value="5" class="xp-key num">5</button>
+            <button data-action="num" data-value="6" class="xp-key num">6</button>
+            <button data-action="op" data-value="*" class="xp-key op">×</button>
+
+            <button data-action="num" data-value="1" class="xp-key num">1</button>
+            <button data-action="num" data-value="2" class="xp-key num">2</button>
+            <button data-action="num" data-value="3" class="xp-key num">3</button>
+            <button data-action="op" data-value="-" class="xp-key op">−</button>
+
+            <button data-action="num" data-value="0" class="xp-key num">0</button>
+            <button data-action="decimal" class="xp-key num">.</button>
+            <button data-action="equals" class="xp-key equals">=</button>
+            <button data-action="op" data-value="+" class="xp-key op">+</button>
+          </div>
+        </div>
+
+        <!-- Mode 2: Trinkgeld & Split -->
+        <div id="tip-mode" class="mode-view hidden">
+          <div class="xp-tip-container">
+            <div class="xp-field">
+              <label for="bill-input">Rechnungsbetrag (€):</label>
+              <input type="number" id="bill-input" class="xp-input" placeholder="0.00" step="0.01">
+            </div>
+
+            <div class="xp-field">
+              <label>Trinkgeld %:</label>
+              <div class="xp-tip-btns">
+                <button class="tip-btn xp-btn-option" data-tip="0">0%</button>
+                <button class="tip-btn xp-btn-option active" data-tip="10">10%</button>
+                <button class="tip-btn xp-btn-option" data-tip="15">15%</button>
+                <button class="tip-btn xp-btn-option" data-tip="20">20%</button>
+              </div>
+            </div>
+
+            <div class="xp-field">
+              <label for="people-input">Personen: <b id="people-count">2</b></label>
+              <input type="range" id="people-input" class="xp-range" min="1" max="10" value="2">
+            </div>
+
+            <fieldset class="xp-summary-box">
+              <legend>Ergebnis</legend>
+              <div class="xp-row"><span>Gesamt:</span> <strong id="tip-total">0.00 €</strong></div>
+              <div class="xp-row highlight"><span>Pro Person:</span> <strong id="tip-per-person">0.00 €</strong></div>
+            </fieldset>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Side: History Sidebar -->
+      <div class="xp-sidebar">
+        <fieldset class="xp-fieldset">
+          <legend>📜 Verlauf</legend>
+          <div class="xp-history-top">
+            <button id="clear-history" class="xp-small-btn">Löschen</button>
+          </div>
+          <div id="history-list" class="xp-history-list">
+            <div class="empty">Kein Verlauf vorhanden</div>
+          </div>
+        </fieldset>
+
+        <fieldset class="xp-fieldset">
+          <legend>⌨️ Tastatur</legend>
+          <div class="xp-hint-row"><span>0-9</span> <b>Ziffern</b></div>
+          <div class="xp-hint-row"><span>⌫ / Backspace</span> <b>Löschen</b></div>
+          <div class="xp-hint-row"><span>Enter</span> <b>Ergebnis</b></div>
+          <div class="xp-hint-row"><span>Esc</span> <b>Reset</b></div>
+        </fieldset>
+      </div>
+
+    </div>
+
+    <!-- Windows XP Status Bar -->
+    <div class="xp-statusbar">
+      <span id="xp-status-left">Windows XP Rechner v1.0</span>
+      <span id="xp-status-right">Bereit</span>
+    </div>
+
+  </div>
+
+  <!-- Windows XP Error Modal -->
+  <div id="xp-error-modal" class="xp-modal-overlay hidden">
+    <div class="xp-modal-dialog">
+      <div class="xp-titlebar">
+        <div class="xp-title">
+          <span>Systemfehler.exe</span>
+        </div>
+        <div class="xp-controls">
+          <button id="close-modal-x" class="xp-btn-ctrl close">✕</button>
+        </div>
+      </div>
+      <div class="xp-modal-body">
+        <div class="xp-error-icon">❌</div>
+        <div class="xp-error-msg">
+          <strong>Fehler 0x80004005: Zugriffsverweigerung!</strong><br><br>
+          Das Fenster kann erst geschlossen werden, nachdem Sie den Entwickler zum <b>Vorstellungsgespräch</b> eingeladen haben! 😉
+        </div>
+      </div>
+      <div class="xp-modal-footer">
+        <a href="mailto:michaeldev0@example.com?subject=Vorstellungsgespräch%20Einladung" class="xp-dialog-btn default">✉️ Einladen</a>
+        <button id="close-modal-btn" class="xp-dialog-btn">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal ("Info über Rechner / Entwickler") -->
+  <div id="xp-info-modal" class="xp-modal-overlay hidden">
+    <div class="xp-modal-dialog">
+      <div class="xp-titlebar">
+        <div class="xp-title">
+          <span>Info über Entwickler</span>
+        </div>
+        <div class="xp-controls">
+          <button id="close-info-x" class="xp-btn-ctrl close">✕</button>
+        </div>
+      </div>
+      <div class="xp-modal-body">
+        <div class="xp-error-icon">👨‍💻</div>
+        <div class="xp-error-msg">
+          <strong>Michael — Frontend & Web Developer</strong><br><br>
+          • Stack: HTML5, CSS3, JavaScript (ES6+), Web APIs<br>
+          • Status: 🚀 <b>Offen für Ausbildung / Junior Stellen</b>
+        </div>
+      </div>
+      <div class="xp-modal-footer">
+        <a href="https://github.com/mijar8" target="_blank" class="xp-dialog-btn default">GitHub Profil</a>
+        <button id="close-info-btn" class="xp-dialog-btn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BSOD Screen Overlay -->
+  <div id="bsod-overlay" class="bsod-screen hidden">
+    <div class="bsod-content">
+      <p>A problem has been detected and Windows has been shut down to prevent damage to your calculator.</p>
+      <br>
+      <p>DIVIDE_BY_ZERO_EXCEPTION</p>
+      <br>
+      <p>If this is the first time you've seen this Stop error screen, restart your calculation. Technical information:</p>
+      <br>
+      <p>*** STOP: 0x00000000 (0xDIVIDE, 0xBY, 0xZERO, 0xERROR)</p>
+      <br>
+      <p class="blink">Klicke irgendwo, um den Rechner neu zu starten...</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
